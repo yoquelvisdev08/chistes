@@ -4,6 +4,8 @@ import { jokeService } from '../services/jokeService'
 import { supabase } from '../lib/supabaseClient'
 import JokeCard from '../components/JokeCard'
 import DashboardJokeCard from '../components/DashboardJokeCard'
+import { jokeApiService } from '../services/jokeApiService'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const Dashboard = () => {
   const [content, setContent] = useState('')
@@ -13,7 +15,9 @@ const Dashboard = () => {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [jokes, setJokes] = useState<Joke[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'add' | 'normal' | 'dark'>('add')
+  const [activeTab, setActiveTab] = useState<'add' | 'normal' | 'dark' | 'generated'>('add')
+  const [generatedJoke, setGeneratedJoke] = useState<Joke | null>(null)
+  const [generating, setGenerating] = useState(false)
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -123,10 +127,25 @@ const Dashboard = () => {
   const normalJokes = jokes.filter(joke => joke.type === 'normal')
   const darkJokes = jokes.filter(joke => joke.type === 'dark')
 
+  const generateJoke = async (type: 'normal' | 'dark') => {
+    try {
+      setGenerating(true)
+      const joke = await jokeApiService.getRandomJoke(type)
+      setGeneratedJoke(joke)
+      // Actualizar la lista de chistes si es necesario
+      loadJokes()
+    } catch (error) {
+      console.error('Error generating joke:', error)
+      alert('Error al generar el chiste')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8">
-        {/* Tabs de navegación */}
+        {/* Tabs de navegación actualizadas */}
         <div className="flex space-x-4 mb-8">
           <button
             onClick={() => setActiveTab('add')}
@@ -137,6 +156,16 @@ const Dashboard = () => {
             }`}
           >
             Añadir Chiste
+          </button>
+          <button
+            onClick={() => setActiveTab('generated')}
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
+              activeTab === 'generated'
+                ? 'bg-accent text-white shadow-lg'
+                : 'bg-white text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            Generados ({jokes.filter(j => j.isGenerated).length})
           </button>
           <button
             onClick={() => setActiveTab('normal')}
@@ -266,6 +295,88 @@ const Dashboard = () => {
                 onUpdate={handleUpdate}
               />
             ))}
+          </div>
+        )}
+
+        {/* Nueva sección para chistes generados */}
+        {activeTab === 'generated' && (
+          <div>
+            {/* Generador */}
+            <div className="generator-section mb-8">
+              <div className="flex gap-4 mb-6">
+                <button
+                  onClick={() => generateJoke('normal')}
+                  disabled={generating}
+                  className="generate-button normal"
+                >
+                  Generar Chiste Normal
+                </button>
+                <button
+                  onClick={() => generateJoke('dark')}
+                  disabled={generating}
+                  className="generate-button dark"
+                >
+                  Generar Humor Negro
+                </button>
+              </div>
+              
+              {generating && <LoadingSpinner />}
+            </div>
+
+            {/* Lista de chistes generados */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {jokes
+                .filter(joke => joke.isGenerated)
+                .map(joke => (
+                  <div key={joke.id} className="generated-joke-card">
+                    <div className="joke-content mb-4">
+                      <p>{joke.content}</p>
+                      <span className="text-sm text-gray-500">
+                        Tipo: {joke.type === 'normal' ? 'Normal' : 'Humor Negro'}
+                      </span>
+                    </div>
+                    <div className="joke-actions flex gap-2">
+                      <button
+                        onClick={() => handleDelete(joke.id)}
+                        className="action-button delete"
+                      >
+                        Eliminar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setContent(joke.content)
+                          setType(joke.type)
+                          setActiveTab('add')
+                        }}
+                        className="action-button edit"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={async () => {
+                          try {
+                            // Añadir a la colección principal
+                            await jokeService.addJoke({
+                              ...joke,
+                              isGenerated: false
+                            })
+                            // Eliminar de generados
+                            await jokeService.deleteJoke(joke.id)
+                            loadJokes()
+                            alert('Chiste añadido a la colección principal')
+                          } catch (error) {
+                            console.error('Error:', error)
+                            alert('Error al añadir el chiste')
+                          }
+                        }}
+                        className="action-button add"
+                      >
+                        Añadir a Colección
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
         )}
       </div>

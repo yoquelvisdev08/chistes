@@ -14,6 +14,7 @@ const Navbar = () => {
         <div className="nav-links-menu">
           <Link to="/">Chistes Normales</Link>
           <Link to="/dark-humor">Humor Negro</Link>
+          <Link to="/random">Generador</Link>
         </div>
       </div>
     </nav>

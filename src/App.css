@@ -123,10 +123,10 @@ body {
   backdrop-filter: blur(10px);
 }
 
-/* Grid de chistes */
-.jokes-container {
+/* Grid de chistes - 5 tarjetas por fila */
+.jokes-container, .history-jokes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.5rem;
   padding: 2rem;
   max-width: 1400px;
@@ -195,23 +195,28 @@ body {
   border-top-color: rgba(255, 0, 0, 0.2);
 }
 
-/* Responsive */
+/* Responsive para el grid */
 @media (max-width: 1400px) {
-  .jokes-container {
-    grid-template-columns: repeat(3, 1fr);
+  .jokes-container, .history-jokes {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 1100px) {
-  .jokes-container {
-    grid-template-columns: repeat(2, 1fr);
+  .jokes-container, .history-jokes {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .jokes-container {
+  .jokes-container, .history-jokes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .jokes-container, .history-jokes {
     grid-template-columns: 1fr;
-    padding: 1rem;
   }
 }
 
@@ -1077,4 +1082,279 @@ body {
 
 .app.dark-mode .joke-form {
   border-bottom-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Estilos para el generador de chistes */
+.random-joke-page {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.joke-type-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.type-button {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  background: rgba(127, 61, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.type-button.active {
+  background: var(--gradient-light);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(127, 61, 255, 0.2);
+}
+
+.app.dark-mode .type-button {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--dark-text);
+}
+
+.app.dark-mode .type-button.active {
+  background: var(--dark-gradient);
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.generator-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.generate-button {
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: var(--gradient-light);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(127, 61, 255, 0.2);
+}
+
+.app.dark-mode .generate-button {
+  background: var(--dark-gradient);
+  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
+}
+
+.generate-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(127, 61, 255, 0.3);
+}
+
+.app.dark-mode .generate-button:hover {
+  box-shadow: 0 12px 30px rgba(255, 0, 0, 0.3);
+}
+
+.current-joke-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.share-button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: rgba(127, 61, 255, 0.1);
+  color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode .share-button {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--dark-text);
+}
+
+.history-container {
+  width: 100%;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(127, 61, 255, 0.1);
+}
+
+.app.dark-mode .history-container {
+  border-top-color: rgba(255, 0, 0, 0.1);
+}
+
+.history-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.app.dark-mode .history-container h2 {
+  color: var(--dark-text);
+}
+
+.history-jokes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-joke {
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(127, 61, 255, 0.05);
+  color: #333;
+}
+
+.app.dark-mode .history-joke {
+  background: rgba(255, 0, 0, 0.05);
+  color: var(--dark-text);
+}
+
+/* Estilos para el generador en el Dashboard */
+.generator-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(127, 61, 255, 0.1);
+}
+
+.app.dark-mode .generator-section {
+  border-top-color: rgba(255, 0, 0, 0.1);
+}
+
+.generate-button.normal {
+  background: var(--gradient-light);
+}
+
+.generate-button.dark {
+  background: var(--dark-gradient);
+}
+
+.generated-joke-preview {
+  background: rgba(127, 61, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.app.dark-mode .generated-joke-preview {
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.use-joke-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode .use-joke-button {
+  background: var(--dark-primary);
+}
+
+.use-joke-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(127, 61, 255, 0.2);
+}
+
+.app.dark-mode .use-joke-button:hover {
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+/* Estilos para las tarjetas de chistes generados */
+.generated-joke-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode .generated-joke-card {
+  background: var(--dark-card-bg);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.generated-joke-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.app.dark-mode .generated-joke-card:hover {
+  box-shadow: 0 8px 15px rgba(255, 0, 0, 0.2);
+}
+
+/* Botones de acción */
+.action-button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.action-button.delete {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
+}
+
+.action-button.edit {
+  background: rgba(127, 61, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.action-button.add {
+  background: rgba(0, 200, 0, 0.1);
+  color: #00a000;
+}
+
+.app.dark-mode .action-button {
+  color: white;
+}
+
+.app.dark-mode .action-button.delete {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+.app.dark-mode .action-button.edit {
+  background: rgba(127, 61, 255, 0.2);
+}
+
+.app.dark-mode .action-button.add {
+  background: rgba(0, 200, 0, 0.2);
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+.action-button.delete:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+.action-button.edit:hover {
+  background: rgba(127, 61, 255, 0.2);
+}
+
+.action-button.add:hover {
+  background: rgba(0, 200, 0, 0.2);
 }

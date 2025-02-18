@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import DarkHumorPage from './pages/DarkHumorPage'
 import Dashboard from './pages/Dashboard'
+import RandomJokePage from './pages/RandomJokePage'
 import './App.css'
 
 function AppContent() {
@@ -18,6 +19,7 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/dark-humor" element={<DarkHumorPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/random" element={<RandomJokePage />} />
         </Routes>
       </main>
     </div>
