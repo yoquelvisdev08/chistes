@@ -1,0 +1,1073 @@
+/* Variables de color */
+:root {
+  --primary-color: #FF4B91;
+  --secondary-color: #FFB4B4;
+  --accent-color: #FFDDD2;
+  --dark-primary: #1E1E1E;
+  --dark-secondary: #FF3333;
+  --dark-accent: #FF0000;
+  --dark-text: #FFFFFF;
+  --dark-gradient: linear-gradient(135deg, #FF0000, #800000);
+  --dark-card-bg: #2A2A2A;
+  --dark-hover: #FF1A1A;
+  --gradient-light: linear-gradient(135deg, #FF4B91, #FFB4B4);
+  --gradient-dark: linear-gradient(135deg, #FF3333, #990000);
+  --background-light: #f8f9fa;
+  --background-dark: #121212;
+}
+
+/* Reset y estilos base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.app {
+  min-height: 100vh;
+  background-color: var(--background-light);
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode {
+  background: linear-gradient(to bottom, #000000, #1A0000);
+  min-height: 100vh;
+}
+
+/* Navbar actualizado */
+.navbar {
+  background: var(--gradient-light);
+  padding: 0.8rem 2rem; /* Altura reducida */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode .navbar {
+  background: var(--dark-gradient);
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+}
+
+/* Contenedor de navegación */
+.nav-links {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* Separa el logo de los enlaces */
+  align-items: center;
+}
+
+/* Contenedor de los enlaces */
+.nav-links-menu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Enlaces */
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.1);
+}
+
+.app.dark-mode .nav-links a {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 0.8rem 1.5rem;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.app.dark-mode .nav-links a:hover {
+  background: rgba(255, 0, 0, 0.2);
+  border-color: var(--dark-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+/* Estilos base de las tarjetas */
+.joke-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+  transition: all 0.4s ease;
+  border: none;
+  padding: 1.5rem;
+  min-height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  overflow: hidden;
+}
+
+/* Grid de chistes */
+.jokes-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Efectos hover en las tarjetas */
+.joke-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+/* Contenido del chiste */
+.joke-content {
+  flex: 1;
+  margin-bottom: 1rem;
+  z-index: 1;
+}
+
+.joke-content p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Meta información */
+.joke-meta {
+  margin-top: auto;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  z-index: 1;
+}
+
+/* Modo oscuro */
+.app.dark-mode .joke-card {
+  background: var(--dark-card-bg);
+  border: 1px solid rgba(255, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.15);
+}
+
+.app.dark-mode .joke-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(255, 0, 0, 0.25);
+  border-color: var(--dark-hover);
+  background: linear-gradient(145deg, #2A2A2A, #1E1E1E);
+}
+
+.app.dark-mode .joke-content p {
+  color: var(--dark-text);
+}
+
+.app.dark-mode .joke-meta {
+  border-top-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .jokes-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .jokes-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .jokes-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .joke-card {
+    min-height: 180px;
+  }
+}
+
+/* Mantener los estilos de reacciones pero ajustar su posición */
+.joke-reactions {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Efecto de brillo en hover */
+.joke-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.joke-card:hover::after {
+  opacity: 0.05;
+}
+
+.app.dark-mode .joke-card::after {
+  background: linear-gradient(45deg, 
+    rgba(255, 0, 0, 0.1), 
+    rgba(255, 0, 0, 0)
+  );
+}
+
+/* Contenedor de acciones */
+.joke-actions {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+/* Botón de guardar */
+.save-button {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.save-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Botón de eliminar */
+.delete-button {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: #ff4444;
+}
+
+/* Contenedor de imagen */
+.joke-image-container {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.joke-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Modo oscuro */
+.app.dark-mode .save-button,
+.app.dark-mode .delete-button {
+  color: rgba(255,255,255,0.6);
+}
+
+.app.dark-mode .save-button:hover,
+.app.dark-mode .delete-button:hover {
+  color: rgba(255,255,255,1);
+}
+
+/* Títulos */
+.page-title {
+  color: var(--primary-color);
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.app.dark-mode .page-title {
+  color: var(--dark-text);
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5),
+               0 0 20px rgba(255, 0, 0, 0.3),
+               0 0 30px rgba(255, 0, 0, 0.2);
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 3rem;
+  position: relative;
+  text-transform: uppercase;
+}
+
+/* Contenedor principal */
+.main-content {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Eliminar líneas no deseadas */
+.app.dark-mode .joke-card::before,
+.app.dark-mode .joke-card::after {
+  display: none;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Estilos base actualizados */
+.home-page h1,
+.dark-humor-page h1 {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 3rem;
+  font-weight: 800;
+  background: var(--gradient-light);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titlePulse 2s ease-in-out infinite;
+}
+
+.dark-humor-page h1 {
+  background: var(--gradient-dark);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255,0,0,0.3);
+  position: relative;
+  z-index: 1;
+}
+
+/* Tarjetas mejoradas */
+.joke-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Botones mejorados */
+.joke-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.like-button,
+.save-button {
+  padding: 0.8rem 1.2rem;
+  border-radius: 15px;
+  font-size: 1.3rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.like-button::before,
+.save-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,75,145,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.like-button:hover::before,
+.save-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Animaciones adicionales */
+@keyframes titlePulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.4); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.2); }
+  60% { transform: scale(1); }
+}
+
+/* Estilos del logo */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Añadir estos estilos a tu App.css */
+
+.joke-date {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+  display: block;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.dark-humor-page .joke-date {
+  color: rgba(255,255,255,0.6);
+}
+
+/* Estilos del Dashboard */
+.dashboard {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dashboard h1 {
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.joke-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.joke-form textarea {
+  min-height: 150px;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 1.1rem;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.joke-form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.joke-form select {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.joke-form button {
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.joke-form button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Animaciones */
+.like-button:active .like-icon {
+  animation: heartBeat 0.8s ease-in-out;
+}
+
+/* Efectos de carga */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.dark-humor-page .loading-spinner {
+  border-color: rgba(255, 0, 0, 0.2);
+  border-top-color: var(--dark-accent);
+  width: 60px;
+  height: 60px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilos del logo */
+.logo-svg {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logo-svg:hover {
+  transform: scale(1.1);
+}
+
+.logo-eye {
+  transition: all 0.3s ease;
+}
+
+.logo-svg:hover .logo-eye {
+  transform: scale(1.2);
+}
+
+.logo-smile {
+  transition: all 0.3s ease;
+}
+
+.logo-svg:hover .logo-smile {
+  transform: translateY(-2px);
+}
+
+.dark-humor-page .logo-svg {
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+}
+
+/* Mejorar el contraste de los botones en humor negro */
+.dark-humor-page .like-button,
+.dark-humor-page .save-button {
+  color: var(--dark-accent);
+  background: rgba(255,51,51,0.1);
+}
+
+.dark-humor-page .like-button:hover,
+.dark-humor-page .save-button:hover {
+  background: rgba(255,51,51,0.2);
+}
+
+/* Mejorar la separación en las tarjetas de humor negro */
+.dark-humor-page .joke-actions {
+  border-top: 2px solid rgba(255,51,51,0.2);
+}
+
+/* Mejorar la visibilidad de los enlaces en el navbar */
+.dark-humor-page .nav-links a {
+  background: rgba(255,51,51,0.1);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.dark-humor-page .nav-links a:hover {
+  background: rgba(255,51,51,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255,0,0,0.2);
+}
+
+/* Contenedor de chistes en modo oscuro */
+.app.dark-mode .jokes-container {
+  gap: 2.5rem;
+  padding: 2rem;
+}
+
+/* Efectos de hover mejorados */
+.app.dark-mode .joke-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, 
+    rgba(255, 0, 0, 0.1), 
+    rgba(255, 0, 0, 0)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.app.dark-mode .joke-card:hover::before {
+  opacity: 1;
+}
+
+/* Animaciones para las tarjetas */
+@keyframes cardPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.app.dark-mode .joke-card:hover {
+  animation: cardPulse 2s infinite;
+}
+
+/* Fecha en modo oscuro */
+.app.dark-mode .joke-date {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Efecto de brillo en los bordes al hover */
+.app.dark-mode .joke-card::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    #FF0000, 
+    #FF3333, 
+    #FF0000, 
+    #800000
+  );
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.app.dark-mode .joke-card:hover::after {
+  opacity: 0.3;
+}
+
+/* Animación del título */
+@keyframes darkTitleGlow {
+  0% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+  50% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
+                     0 0 30px rgba(255, 0, 0, 0.6),
+                     0 0 40px rgba(255, 0, 0, 0.4); }
+  100% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+}
+
+.app.dark-mode .page-title {
+  animation: darkTitleGlow 3s infinite;
+}
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Botones de reacción */
+.reaction-button {
+  background: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.05);
+  min-width: 70px;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto !important;
+}
+
+/* Icono de reacción */
+.reaction-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contador de reacciones */
+.reaction-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+  color: #666;
+}
+
+/* Estado activo para cada tipo de reacción */
+.reaction-button.laugh.active {
+  background: rgba(255, 233, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.reaction-button.sad.active {
+  background: rgba(0, 123, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.reaction-button.puke.active {
+  background: rgba(40, 167, 69, 0.3);
+  transform: scale(1.05);
+}
+
+/* Efectos hover solo cuando no está activo */
+.reaction-button:not(.active):hover {
+  transform: scale(1.05);
+  background: rgba(0,0,0,0.08);
+}
+
+.reaction-button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  pointer-events: auto !important;
+}
+
+/* Modo oscuro */
+.app.dark-mode .reaction-button.laugh.active {
+  background: rgba(255, 233, 0, 0.4);
+}
+
+.app.dark-mode .reaction-button.sad.active {
+  background: rgba(0, 123, 255, 0.4);
+}
+
+.app.dark-mode .reaction-button.puke.active {
+  background: rgba(40, 167, 69, 0.4);
+}
+
+/* Efectos hover para las reacciones */
+.reaction-button:hover {
+  transform: scale(1.05);
+}
+
+.reaction-button:active {
+  transform: scale(0.95);
+}
+
+/* Animaciones específicas para cada reacción */
+.reaction-button.laugh:hover {
+  background: rgba(255, 233, 0, 0.2);
+}
+
+.reaction-button.sad:hover {
+  background: rgba(0, 123, 255, 0.2);
+}
+
+.reaction-button.puke:hover {
+  background: rgba(40, 167, 69, 0.2);
+}
+
+/* Contenedor de reacciones */
+.joke-reactions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Modo oscuro */
+.app.dark-mode .save-button {
+  color: rgba(255,255,255,0.6);
+}
+
+.app.dark-mode .save-button:hover {
+  color: rgba(255,255,255,1);
+}
+
+/* Eliminar cualquier superposición que pueda estar bloqueando los clics */
+.joke-card::before,
+.joke-card::after {
+  pointer-events: none;
+}
+
+/* Contenedor de imagen */
+.joke-image {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.joke-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.joke-card:hover .joke-image img {
+  transform: scale(1.05);
+}
+
+/* Ajustar el formulario del Dashboard para incluir imagen */
+.joke-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.image-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.image-input-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+.image-input {
+  padding: 0.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.image-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Modo oscuro */
+.app.dark-mode .joke-image {
+  border: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+.app.dark-mode .image-input {
+  background: #2a2a2a;
+  border-color: rgba(255, 0, 0, 0.2);
+  color: white;
+}
+
+.app.dark-mode .image-input-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Estilos para el enlace del Dashboard */
+.nav-links-menu Link[to="/dashboard"] {
+  background: rgba(255,255,255,0.2);
+}
+
+.app.dark-mode .nav-links-menu Link[to="/dashboard"] {
+  background: rgba(255,0,0,0.2);
+}
+
+/* Estilos para la subida de imágenes */
+.image-upload-area {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(0,0,0,0.02);
+}
+
+.image-upload-area::before {
+  content: '📸 Arrastra una imagen o haz clic para seleccionar';
+  position: absolute;
+  color: #666;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.image-upload-input {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.image-preview {
+  position: relative;
+  max-width: 200px;
+  margin-top: 1rem;
+  z-index: 2;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-image-button:hover {
+  transform: scale(1.1);
+  background: #ff0000;
+}
+
+.upload-progress {
+  width: 100%;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #007bff;
+  transition: width 0.3s ease;
+}
+
+.upload-progress span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Modo oscuro */
+.app.dark-mode .image-upload-area {
+  border-color: rgba(255, 0, 0, 0.2);
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.app.dark-mode .image-upload-area:hover {
+  border-color: rgba(255, 0, 0, 0.4);
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.app.dark-mode .upload-progress {
+  background: #2a2a2a;
+}
+
+.app.dark-mode .progress-bar {
+  background: #ff3333;
+}
+
+.app.dark-mode .upload-progress span {
+  color: white;
+}
+
+/* Estilos para el dashboard */
+.jokes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.dashboard h2 {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+  color: #333;
+}
+
+.app.dark-mode .dashboard h2 {
+  color: #fff;
+  border-top-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Ajustar el espacio entre el formulario y la lista de chistes */
+.joke-form {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.app.dark-mode .joke-form {
+  border-bottom-color: rgba(255, 0, 0, 0.2);
+}
