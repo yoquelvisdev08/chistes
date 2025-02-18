@@ -558,7 +558,21 @@ const Dashboard = () => {
                 <div key={joke.id} className="instagram-joke-card">
                   <div className="preview-container">
                     <div className="instagram-preview" id={`preview-${joke.id}`}>
-                      <p className="joke-text">{joke.content}</p>
+                      <span className="preview-emoji top-left">
+                        {joke.type === 'normal' ? '😂' : '💀'}
+                      </span>
+                      <span className="preview-emoji top-right">
+                        {joke.type === 'normal' ? '🤣' : '🖤'}
+                      </span>
+                      <div className="joke-text-container">
+                        <p className="joke-text">{joke.content}</p>
+                      </div>
+                      <span className="preview-emoji bottom-left">
+                        {joke.type === 'normal' ? '😆' : '👻'}
+                      </span>
+                      <span className="preview-emoji bottom-right">
+                        {joke.type === 'normal' ? '😅' : '🔪'}
+                      </span>
                       <div className="watermark">@tuapp</div>
                     </div>
                   </div>
