@@ -4,35 +4,46 @@ import { Joke } from '../types'
 import JokeCard from '../components/JokeCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 
+interface GeneratedJoke {
+  id: string;
+  content: string;
+  type: string;
+  createdAt: string;
+  reactions: {
+    laugh: number;
+    sad: number;
+    puke: number;
+  };
+}
+
 const RandomJokePage = () => {
-  const [currentJoke, setCurrentJoke] = useState<Joke | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [generatedJoke, setGeneratedJoke] = useState<GeneratedJoke | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [jokeType, setJokeType] = useState<'normal' | 'dark'>('normal')
   const [history, setHistory] = useState<Joke[]>([])
 
-  const generateJoke = async () => {
+  const handleGenerateJoke = async (type: 'normal' | 'dark') => {
     try {
-      setLoading(true)
+      setIsLoading(true)
       setError(null)
-      const joke = await jokeApiService.getRandomJoke(jokeType)
-      setCurrentJoke(joke)
+      const joke = await jokeApiService.generateJoke(type)
+      setGeneratedJoke(joke)
       
       // Solo añadir al historial si no es un chiste repetido
       if (!history.some(h => h.content === joke.content)) {
         setHistory(prev => [joke, ...prev].slice(0, 5))
       }
-    } catch (error) {
-      setError('Error al generar el chiste. ¡Inténtalo de nuevo!')
-      console.error('Error generating joke:', error)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al generar el chiste')
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
   const copyJokeLink = () => {
-    if (currentJoke) {
-      const link = `${window.location.origin}/joke/${currentJoke.id}`
+    if (generatedJoke) {
+      const link = `${window.location.origin}/joke/${generatedJoke.content.split(' ').join('-')}`
       navigator.clipboard.writeText(link)
       alert('Enlace copiado al portapapeles!')
     }
@@ -40,72 +51,68 @@ const RandomJokePage = () => {
 
   return (
     <div className="section-generator">
-      {/* Emojis flotantes decorativos */}
-      <div className="floating-emoji" style={{ top: '20%', left: '10%' }}>🎲</div>
-      <div className="floating-emoji" style={{ top: '35%', right: '15%' }}>🎮</div>
-      <div className="floating-emoji" style={{ bottom: '15%', left: '20%' }}>🎯</div>
+      <h1 className="section-title">Generador de Chistes</h1>
       
-      <h1 className="section-title generator">Generador de Chistes</h1>
-      
-      <div className="joke-type-selector">
+      <div className="generator-buttons">
         <button
-          className={`type-button ${jokeType === 'normal' ? 'active' : ''}`}
-          onClick={() => setJokeType('normal')}
-          disabled={loading}
+          onClick={() => handleGenerateJoke('normal')}
+          disabled={isLoading}
+          className="generate-button normal"
         >
-          Chistes Normales
+          {isLoading ? 'Generando...' : 'Chistes Normales'}
         </button>
+        
         <button
-          className={`type-button ${jokeType === 'dark' ? 'active' : ''}`}
-          onClick={() => setJokeType('dark')}
-          disabled={loading}
+          onClick={() => handleGenerateJoke('dark')}
+          disabled={isLoading}
+          className="generate-button dark"
         >
-          Humor Negro
+          {isLoading ? 'Generando...' : 'Humor Negro'}
         </button>
       </div>
 
-      <div className="generator-container">
-        <button 
-          className="generate-button"
-          onClick={generateJoke}
-          disabled={loading}
-        >
-          {loading ? <LoadingSpinner /> : '¡Generar Chiste!'}
-        </button>
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
 
-        {error && (
-          <div className="error-message">
-            {error}
+      {generatedJoke && (
+        <div className="generated-joke">
+          <p className="joke-content">{generatedJoke.content}</p>
+          <div className="joke-meta">
+            <span className="joke-type">{generatedJoke.type}</span>
+            <span className="joke-date">
+              {new Date(generatedJoke.createdAt).toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </span>
           </div>
-        )}
+          <button
+            onClick={() => navigator.clipboard.writeText(generatedJoke.content)}
+            className="copy-button"
+          >
+            Copiar Enlace
+          </button>
+        </div>
+      )}
 
-        {currentJoke && (
-          <div className="current-joke-container">
-            <JokeCard joke={currentJoke} isGenerated={true} />
-            <button 
-              className="share-button"
-              onClick={copyJokeLink}
-            >
-              Copiar Enlace 🔗
-            </button>
+      {history.length > 0 && (
+        <div className="history-container">
+          <h2>Últimos chistes generados</h2>
+          <div className="history-jokes">
+            {history.map((joke, index) => (
+              <JokeCard 
+                key={index} 
+                joke={joke} 
+                isGenerated={true}
+              />
+            ))}
           </div>
-        )}
-
-        {history.length > 0 && (
-          <div className="history-container">
-            <h2>Últimos chistes generados</h2>
-            <div className="history-jokes">
-              {history.map((joke, index) => (
-                <JokeCard 
-                  key={index} 
-                  joke={joke} 
-                  isGenerated={true}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

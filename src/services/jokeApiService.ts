@@ -1,93 +1,127 @@
+import axios from 'axios';
 import { supabase } from '../lib/supabaseClient';
 
-// APIs disponibles
-const APIS = {
-  normal: [
-    {
-      name: 'jokeapi-mixed',
-      url: 'https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Pun,Spooky,Christmas?type=single',
-      parser: (data: any) => ({
-        content: data.joke,
-        type: 'normal',
-        image_url: null
-      })
-    }
-  ],
-  dark: [
-    {
-      name: 'jokeapi-dark',
-      url: 'https://v2.jokeapi.dev/joke/Dark?type=single',
-      parser: (data: any) => ({
-        content: data.joke,
-        type: 'dark',
-        image_url: null
-      })
-    }
-  ]
-};
+interface JokeResponse {
+  error: boolean;
+  category: string;
+  type: string;
+  joke?: string;
+  setup?: string;
+  delivery?: string;
+  flags: {
+    nsfw: boolean;
+    religious: boolean;
+    political: boolean;
+    racist: boolean;
+    sexist: boolean;
+  };
+  id: number;
+  safe: boolean;
+  lang: string;
+}
 
-// Chistes de respaldo locales
-const LOCAL_JOKES = {
-  normal: [
-    "¿Qué hace un programador zombi? Programar en códigos muertos.",
-    "¿Por qué los programadores prefieren el frío? Porque tienen muchos ventiladores.",
-    "¿Cuál es el colmo de un programador? No poder programar su vida.",
-    "¿Qué le dice un programador a otro? ¡Nos vemos en el código!",
-    "¿Por qué los programadores odian la naturaleza? Porque tiene demasiados bugs."
-  ],
-  dark: [
-    "¿Qué le dice un bit a otro? Nos vemos en el bus.",
-    "¿Por qué el código no funciona? Porque está muerto por dentro.",
-    "¿Qué le dice un programador a su código? No funcionas y no sé por qué.",
-    "¿Qué es un programador sin café? Un zombie en modo debug.",
-    "Mi código es como la muerte: nadie entiende cómo funciona."
-  ]
-};
-
-export const jokeApiService = {
-  async getRandomJoke(type: 'normal' | 'dark') {
+class JokeApiService {
+  private async getRandomJoke(isDark: boolean = false): Promise<string> {
     try {
-      const api = APIS[type][0];
-      const response = await fetch(api.url);
+      const category = isDark ? 'Dark' : 'Any';
+      const url = `https://v2.jokeapi.dev/joke/${category}`;
       
-      if (!response.ok) {
-        throw new Error('API Error');
+      const response = await axios.get<JokeResponse>(url, {
+        params: {
+          format: 'json',
+          blacklistFlags: isDark ? '' : 'nsfw,religious,racist,sexist',
+          type: 'single,twopart'
+        }
+      });
+
+      if (response.data.error) {
+        throw new Error('Error en la API de chistes');
       }
 
-      const data = await response.json();
-      const parsedJoke = api.parser(data);
+      // Si es un chiste de dos partes, combinarlos
+      if (response.data.type === 'twopart' && response.data.setup && response.data.delivery) {
+        return `${response.data.setup}\n${response.data.delivery}`;
+      }
 
-      // Insertar el chiste SOLO en la tabla de chistes generados
-      const { data: joke, error: jokeError } = await supabase
-        .from('generated_jokes_only') // Nueva tabla solo para generados
+      // Si es un chiste simple
+      if (response.data.joke) {
+        return response.data.joke;
+      }
+
+      throw new Error('Formato de chiste no válido');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error de Axios:', error.message);
+        throw new Error(`Error al obtener chiste: ${error.message}`);
+      }
+      throw error;
+    }
+  }
+
+  async generateJoke(type: 'normal' | 'dark'): Promise<{
+    id: string;
+    content: string;
+    type: string;
+    createdAt: string;
+    reactions: {
+      laugh: number;
+      sad: number;
+      puke: number;
+    };
+  }> {
+    try {
+      const jokeContent = await this.getRandomJoke(type === 'dark');
+      
+      // Primero, crear el chiste en la tabla jokes
+      const { data: jokeData, error: jokeError } = await supabase
+        .from('jokes')
         .insert([{
-          content: parsedJoke.content,
-          type: parsedJoke.type,
-          image_url: parsedJoke.image_url,
-          reactions: { laugh: 0, sad: 0, puke: 0 },
-          created_at: new Date().toISOString()
+          content: jokeContent,
+          type: type,
+          created_at: new Date().toISOString(),
+          reactions: {
+            laugh: 0,
+            sad: 0,
+            puke: 0
+          }
         }])
         .select()
         .single();
 
-      if (jokeError) throw jokeError;
+      if (jokeError) {
+        throw new Error(`Error al crear el chiste: ${jokeError.message}`);
+      }
+
+      if (!jokeData) {
+        throw new Error('No se recibieron datos del chiste creado');
+      }
+
+      // Luego, crear el registro en generated_jokes
+      const { error: genError } = await supabase
+        .from('generated_jokes')
+        .insert([{
+          joke_id: jokeData.id,
+          source: 'api',
+          api_source: type === 'dark' ? 'dark' : 'normal'
+        }]);
+
+      if (genError) {
+        throw new Error(`Error al registrar chiste generado: ${genError.message}`);
+      }
 
       return {
-        id: joke.id,
-        content: joke.content,
-        type: joke.type,
-        imageUrl: joke.image_url,
-        reactions: joke.reactions,
-        createdAt: joke.created_at,
-        isGenerated: true
+        id: jokeData.id,
+        content: jokeData.content,
+        type: jokeData.type,
+        createdAt: jokeData.created_at,
+        reactions: jokeData.reactions
       };
     } catch (error) {
-      console.error('Error fetching joke:', error);
+      console.error('Error en generateJoke:', error);
       throw error;
     }
-  },
+  }
 
-  // Obtener todos los chistes generados con su información
   async getGeneratedJokes() {
     const { data, error } = await supabase
       .from('jokes')
@@ -100,19 +134,20 @@ export const jokeApiService = {
           created_at
         )
       `)
-      .order('created_at', { foreignTable: 'generated_jokes', ascending: false });
+      .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     return data.map(joke => ({
       id: joke.id,
       content: joke.content,
       type: joke.type,
-      imageUrl: joke.image_url,
-      reactions: joke.reactions,
-      likes: joke.likes,
       createdAt: joke.created_at,
-      generatedInfo: joke.generated_jokes
+      reactions: joke.reactions
     }));
   }
-}; 
+}
+
+export const jokeApiService = new JokeApiService(); 

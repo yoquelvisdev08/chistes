@@ -392,30 +392,7 @@ body {
 
 /* Rediseño del botón de guardar */
 .save-button {
-  background: rgba(127, 61, 255, 0.1);
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  font-size: 1.2rem;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-  opacity: 0.8;
-}
-
-/* Estilos para modo oscuro */
-.app.dark-mode .save-button {
-  background: rgba(255, 0, 0, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-/* Eliminar efectos hover y animaciones innecesarias */
-.joke-card:hover .joke-actions {
-  opacity: 1;
+  display: none; /* Ocultar el botón flotante */
 }
 
 /* Botón de eliminar */
@@ -471,23 +448,86 @@ body {
   color: rgba(255,255,255,1);
 }
 
-/* Títulos actualizados */
-.page-title {
+/* Estilos para los títulos principales */
+.section-title {
   text-align: center;
-  margin: 3rem 0;
-  font-size: 3.5rem;
+  margin: 3rem auto;
+  font-size: 4rem;
   font-weight: 800;
-  background: var(--gradient-light);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titlePulse 3s ease-in-out infinite;
+  position: relative;
+  max-width: 800px;
+  padding: 0 2rem;
 }
 
-.app.dark-mode .page-title {
-  background: var(--dark-gradient);
+/* Título de Chistes Normales */
+.section-normal .section-title {
+  background: linear-gradient(45deg, #7F3DFF, #B69FFF);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+  animation: normalTitleGlow 3s infinite;
+}
+
+@keyframes normalTitleGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(127, 61, 255, 0.3),
+                 0 0 40px rgba(127, 61, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(127, 61, 255, 0.5),
+                 0 0 60px rgba(127, 61, 255, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+/* Título de Humor Negro */
+.section-dark .section-title {
+  background: linear-gradient(45deg, #FF3434, #FF0000, #800000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: darkTitleGlow 3s infinite;
+}
+
+@keyframes darkTitleGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.3),
+                 0 0 40px rgba(255, 0, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 0, 0, 0.5),
+                 0 0 60px rgba(255, 0, 0, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+/* Título del Generador */
+.section-generator .section-title {
+  background: linear-gradient(45deg, #7F3DFF, #B69FFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: generatorTitleGlow 3s infinite;
+}
+
+@keyframes generatorTitleGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(127, 61, 255, 0.3),
+                 0 0 40px rgba(127, 61, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(127, 61, 255, 0.5),
+                 0 0 60px rgba(127, 61, 255, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+/* Modo oscuro para los títulos */
+.app.dark-mode .section-title {
+  color: var(--dark-text);
 }
 
 /* Contenedor principal */
@@ -581,11 +621,6 @@ body {
 @keyframes titlePulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.02); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-10px) rotate(5deg); }
 }
 
 @keyframes heartBeat {
@@ -1258,217 +1293,73 @@ body {
 .generator-container {
   max-width: 800px;
   margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.generator-buttons {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
 }
 
 .generate-button {
-  padding: 1.5rem 3rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  background: var(--gradient-light);
-  color: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(127, 61, 255, 0.2);
-}
-
-.app.dark-mode .generate-button {
-  background: var(--dark-gradient);
-  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
-}
-
-.generate-button:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(127, 61, 255, 0.3);
-}
-
-.app.dark-mode .generate-button:hover {
-  box-shadow: 0 12px 30px rgba(255, 0, 0, 0.3);
-}
-
-.current-joke-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.share-button {
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;
   border-radius: 12px;
-  font-size: 1rem;
   font-weight: 600;
-  background: rgba(127, 61, 255, 0.1);
-  color: var(--primary-color);
-  border: none;
-  cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.app.dark-mode .share-button {
-  background: rgba(255, 0, 0, 0.1);
-  color: var(--dark-text);
-}
-
-.history-container {
-  width: 100%;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(127, 61, 255, 0.1);
-}
-
-.app.dark-mode .history-container {
-  border-top-color: rgba(255, 0, 0, 0.1);
-}
-
-.history-container h2 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-}
-
-.app.dark-mode .history-container h2 {
-  color: var(--dark-text);
-}
-
-.history-jokes {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.history-joke {
-  padding: 1rem;
-  border-radius: 12px;
-  background: rgba(127, 61, 255, 0.05);
-  color: #333;
-}
-
-.app.dark-mode .history-joke {
-  background: rgba(255, 0, 0, 0.05);
-  color: var(--dark-text);
-}
-
-/* Estilos para el generador en el Dashboard */
-.generator-section {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(127, 61, 255, 0.1);
-}
-
-.app.dark-mode .generator-section {
-  border-top-color: rgba(255, 0, 0, 0.1);
+  cursor: pointer;
+  border: none;
 }
 
 .generate-button.normal {
   background: var(--gradient-light);
+  color: white;
 }
 
 .generate-button.dark {
   background: var(--dark-gradient);
-}
-
-.generated-joke-preview {
-  background: rgba(127, 61, 255, 0.05);
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
-
-.app.dark-mode .generated-joke-preview {
-  background: rgba(255, 0, 0, 0.05);
-}
-
-.use-joke-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background: var(--primary-color);
   color: white;
-  border-radius: 8px;
-  transition: all 0.3s ease;
 }
 
-.app.dark-mode .use-joke-button {
-  background: var(--dark-primary);
+.generate-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.use-joke-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(127, 61, 255, 0.2);
-}
-
-.app.dark-mode .use-joke-button:hover {
-  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
-}
-
-/* Estilos para las tarjetas de chistes generados */
-.generated-joke-card {
+.generated-joke {
   background: white;
   border-radius: 15px;
   padding: 2rem;
+  margin-top: 2rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
 }
 
-.generated-joke-card .joke-content {
-  flex: 1;
-  margin-bottom: 1.5rem;
+.error-message {
+  color: #ff3b30;
+  background: rgba(255, 59, 48, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
 }
 
-.generated-joke-card .joke-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #333;
-  margin: 0;
-  text-align: center;
-  /* Quitar límite de líneas */
-  overflow: visible;
-  display: block;
-  -webkit-line-clamp: unset;
-  -webkit-box-orient: unset;
-  max-height: none;
-}
-
-.generated-joke-card .joke-meta {
-  margin: 1.5rem 0;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.generated-joke-card .joke-type {
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+.copy-button {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
   background: rgba(127, 61, 255, 0.1);
   color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.generated-joke-card .joke-date {
-  color: #999;
-  font-size: 0.9rem;
+.copy-button:hover {
+  background: rgba(127, 61, 255, 0.2);
 }
 
-.generated-joke-card .joke-actions {
-  margin-top: auto;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-/* Footer arreglado */
+/* Estilos actualizados del footer */
 .footer {
   width: 100%;
   padding: 1.5rem 0;
@@ -1487,25 +1378,69 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
+/* Estilo para el texto del copyright */
+.footer-copyright {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-copyright span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Estilos para los enlaces del footer */
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.footer-links a:hover {
+  color: #333;
+  background: rgba(127, 61, 255, 0.1);
+}
+
+/* Modo oscuro */
 .app.dark-mode .footer {
   background: rgba(20, 20, 20, 0.95);
   border-top: 1px solid rgba(255, 0, 0, 0.2);
 }
 
-.app.dark-mode .footer-text {
-  color: rgba(255, 255, 255, 0.7);
-}
-
+.app.dark-mode .footer-copyright,
 .app.dark-mode .footer-links a {
   color: rgba(255, 255, 255, 0.7);
 }
 
 .app.dark-mode .footer-links a:hover {
   color: #ffffff;
+  background: rgba(255, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 /* Actualizar el fondo para humor negro */
@@ -1544,183 +1479,6 @@ body.dark-mode {
     text-shadow: 0 0 30px rgba(255, 0, 0, 0.5),
                  0 0 60px rgba(255, 0, 0, 0.3);
     transform: scale(1.02);
-  }
-}
-
-/* Decoración del título */
-.section-dark h1::before,
-.section-dark h1::after {
-  content: '💀';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 2.5rem;
-  opacity: 0.2;
-  animation: floatEmoji 3s ease-in-out infinite;
-}
-
-.section-dark h1::before {
-  left: 0;
-  animation-delay: 0.5s;
-}
-
-.section-dark h1::after {
-  right: 0;
-  animation-delay: 1s;
-}
-
-@keyframes floatEmoji {
-  0%, 100% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-70%) rotate(10deg);
-  }
-}
-
-/* Asegurar que la sección dark tenga fondo transparente */
-.section-dark {
-  background: transparent;
-  min-height: 100vh;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Ajustar el contenedor de chistes en modo oscuro */
-.app.dark-mode .jokes-container {
-  background: transparent;
-  position: relative;
-  z-index: 2;
-}
-
-/* Título animado del generador */
-.section-generator h1 {
-  text-align: center;
-  margin: 3rem auto;
-  font-size: 4rem;
-  font-weight: 800;
-  background: linear-gradient(45deg, #7F3DFF, #B69FFF);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: generatorTitleGlow 3s infinite;
-  position: relative;
-  max-width: 800px;
-  padding: 0 2rem;
-}
-
-@keyframes generatorTitleGlow {
-  0%, 100% {
-    text-shadow: 0 0 20px rgba(127, 61, 255, 0.3),
-                 0 0 40px rgba(127, 61, 255, 0.2);
-    transform: scale(1);
-  }
-  50% {
-    text-shadow: 0 0 30px rgba(127, 61, 255, 0.5),
-                 0 0 60px rgba(127, 61, 255, 0.3);
-    transform: scale(1.02);
-  }
-}
-
-/* Tarjetas mejoradas para el generador */
-.generated-joke-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 250px;
-  height: 100%;
-  padding: 2rem;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(127, 61, 255, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  border: 1px solid rgba(127, 61, 255, 0.1);
-}
-
-.generated-joke-card .joke-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.generated-joke-card .joke-content p {
-  font-size: 1.2rem;
-  line-height: 1.7;
-  color: #333;
-  margin: 0;
-  font-weight: 500;
-  text-align: center;
-  /* Para textos largos */
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  max-height: 240px;
-}
-
-.generated-joke-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(127, 61, 255, 0.15);
-  background: linear-gradient(145deg, 
-    rgba(127, 61, 255, 0.05), 
-    rgba(182, 159, 255, 0.1)
-  );
-}
-
-/* Footer mejorado */
-.footer-links {
-  display: flex;
-  gap: 3rem; /* Aumentar el espacio entre enlaces */
-  align-items: center;
-}
-
-.footer-links a {
-  color: #666;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-}
-
-.footer-links a:hover {
-  color: #333;
-  background: rgba(127, 61, 255, 0.1);
-}
-
-.app.dark-mode .footer-links {
-  gap: 3rem;
-}
-
-.app.dark-mode .footer-links a {
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-}
-
-.app.dark-mode .footer-links a:hover {
-  color: #ffffff;
-  background: rgba(255, 0, 0, 0.1);
-}
-
-/* Responsive del footer */
-@media (max-width: 768px) {
-  .footer-links {
-    flex-direction: row; /* Mantener horizontal en móvil */
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-  
-  .footer-content {
-    flex-direction: column;
-    gap: 2rem;
   }
 }
 
@@ -2098,4 +1856,28 @@ body.dark-mode {
 .instagram-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(220, 39, 67, 0.2);
+}
+
+/* Contenedores de sección */
+.section-normal,
+.section-dark,
+.section-generator {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Eliminar los estilos de emojis flotantes */
+.floating-emoji {
+  display: none;
+}
+
+/* También eliminar cualquier animación relacionada */
+@keyframes floatEmoji {
+  0%, 100% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-70%) rotate(10deg);
+  }
 }

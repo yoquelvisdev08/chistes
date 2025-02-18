@@ -176,53 +176,18 @@ const Dashboard = () => {
   };
 
   // Función mejorada para generar chistes
-  const generateJoke = async (type: 'normal' | 'dark') => {
+  const handleGenerateJoke = async (type: 'normal' | 'dark') => {
     try {
-      setGeneratorState({ status: 'generating' });
-      
-      // Sistema de throttling mejorado
-      const lastGeneration = localStorage.getItem('lastJokeGeneration');
-      const now = Date.now();
-      
-      if (lastGeneration && now - parseInt(lastGeneration) < 2000) {
-        throw new Error('Por favor, espera un momento entre generaciones');
-      }
-      
-      localStorage.setItem('lastJokeGeneration', now.toString());
-
-      const joke = await jokeApiService.getRandomJoke(type);
-      
-      // Verificar si el chiste ya existe en los últimos generados
-      if (lastGeneratedJokes.some(j => j.content === joke.content)) {
-        throw new Error('Este chiste ya fue generado recientemente. Intentando de nuevo...');
-      }
-
-      // Registrar en la tabla de chistes generados
-      const { error: genError } = await supabase
-        .from('generated_jokes')
-        .insert([{
-          joke_id: joke.id,
-          source: 'dashboard',
-          api_source: type === 'normal' ? 'jokeapi-mixed' : 'jokeapi-dark'
-        }]);
-
-      if (genError) throw genError;
-
-      setGeneratedJoke(joke);
-      await loadLastGeneratedJokes();
-      setGeneratorState({ status: 'success' });
-      
-    } catch (error) {
-      console.error('Error generating joke:', error);
-      setGeneratorState({ 
-        status: 'error', 
-        message: error instanceof Error ? error.message : 'Error al generar el chiste'
+      const generatedJoke = await jokeApiService.generateJoke(type);
+      // Aquí puedes guardar el chiste en tu base de datos o estado
+      await jokeService.addJoke({
+        ...generatedJoke,
+        isGenerated: true
       });
-      
-      // Auto-reset del estado de error después de 3 segundos
-      setTimeout(() => {
-        setGeneratorState({ status: 'idle' });
-      }, 3000);
+      loadLastGeneratedJokes(); // Recargar la lista de chistes generados
+    } catch (error) {
+      console.error('Error al generar chiste:', error);
+      alert('Error al generar el chiste. Por favor intenta de nuevo.');
     }
   };
 
@@ -430,7 +395,7 @@ const Dashboard = () => {
               <div className="generator-controls flex flex-col gap-4">
                 <div className="buttons-container flex gap-4 justify-center">
                   <button
-                    onClick={() => generateJoke('normal')}
+                    onClick={() => handleGenerateJoke('normal')}
                     disabled={generatorState.status === 'generating'}
                     className="generate-button normal flex items-center gap-2 px-6 py-3"
                   >
@@ -440,7 +405,7 @@ const Dashboard = () => {
                     Generar Chiste Normal
                   </button>
                   <button
-                    onClick={() => generateJoke('dark')}
+                    onClick={() => handleGenerateJoke('dark')}
                     disabled={generatorState.status === 'generating'}
                     className="generate-button dark flex items-center gap-2 px-6 py-3"
                   >

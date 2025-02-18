@@ -4,19 +4,38 @@ import { Joke } from '../types'
 import { jokeService } from '../services/jokeService'
 
 interface JokeCardProps {
-  joke: Joke;
-  onReactionUpdate?: (jokeId: string, newReactions: Joke['reactions']) => void;
+  joke: {
+    id: string;
+    content: string;
+    type: string;
+    reactions: {
+      laugh: number;
+      sad: number;
+      puke: number;
+    };
+    createdAt: string;
+  };
+  onReaction?: (type: 'laugh' | 'sad' | 'puke') => void;
   onDelete?: (id: string) => void;
   isGenerated?: boolean;
 }
 
-const JokeCard = ({ joke, onReactionUpdate, onDelete, isGenerated = false }: JokeCardProps) => {
+const JokeCard: React.FC<JokeCardProps> = ({ joke, onReaction, onDelete, isGenerated = false }) => {
+  // Asegurarnos de que reactions siempre tenga un valor por defecto
+  const defaultReactions = {
+    laugh: 0,
+    sad: 0,
+    puke: 0
+  };
+
+  const reactions = joke.reactions || defaultReactions;
+
   // Estado para las reacciones totales
-  const [totalReactions, setTotalReactions] = useState(joke.reactions)
+  const [totalReactions, setTotalReactions] = useState(reactions)
   
   // Añadir logs para ver los valores iniciales
   console.log('Valor inicial de totalReactions:', totalReactions)
-  console.log('Valor inicial de joke.reactions:', joke.reactions)
+  console.log('Valor inicial de joke.reactions:', reactions)
   
   // Estado para las reacciones del usuario actual
   const [userReactions, setUserReactions] = useState(() => {
@@ -87,8 +106,8 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete, isGenerated = false }: Jok
       await jokeService.updateReactions(joke.id, newTotalReactions)
       console.log('Actualización en base de datos exitosa')
       
-      if (onReactionUpdate) {
-        onReactionUpdate(joke.id, newTotalReactions)
+      if (onReaction) {
+        onReaction(type)
         console.log('Callback de actualización ejecutado')
       }
     } catch (error) {
