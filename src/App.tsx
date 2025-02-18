@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import DarkHumorPage from './pages/DarkHumorPage'
 import Dashboard from './pages/Dashboard'
 import RandomJokePage from './pages/RandomJokePage'
+import Footer from './components/Footer'
 import './App.css'
 
 function AppContent() {
@@ -22,6 +23,7 @@ function AppContent() {
           <Route path="/random" element={<RandomJokePage />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   )
 }

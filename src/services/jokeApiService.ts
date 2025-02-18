@@ -57,31 +57,20 @@ export const jokeApiService = {
       const data = await response.json();
       const parsedJoke = api.parser(data);
 
-      // Insertar el chiste en la tabla principal
+      // Insertar el chiste SOLO en la tabla de chistes generados
       const { data: joke, error: jokeError } = await supabase
-        .from('jokes')
+        .from('generated_jokes_only') // Nueva tabla solo para generados
         .insert([{
           content: parsedJoke.content,
           type: parsedJoke.type,
           image_url: parsedJoke.image_url,
           reactions: { laugh: 0, sad: 0, puke: 0 },
-          likes: 0
+          created_at: new Date().toISOString()
         }])
         .select()
         .single();
 
       if (jokeError) throw jokeError;
-
-      // Registrar en la tabla de chistes generados
-      const { error: genError } = await supabase
-        .from('generated_jokes')
-        .insert([{
-          joke_id: joke.id,
-          source: 'api',
-          api_source: api.name
-        }]);
-
-      if (genError) throw genError;
 
       return {
         id: joke.id,
@@ -89,10 +78,9 @@ export const jokeApiService = {
         type: joke.type,
         imageUrl: joke.image_url,
         reactions: joke.reactions,
-        likes: joke.likes,
-        createdAt: joke.created_at
+        createdAt: joke.created_at,
+        isGenerated: true
       };
-
     } catch (error) {
       console.error('Error fetching joke:', error);
       throw error;

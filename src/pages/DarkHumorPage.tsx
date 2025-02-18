@@ -53,8 +53,13 @@ const DarkHumorPage = () => {
   if (loading) return <LoadingSpinner />
 
   return (
-    <div className="dark-humor-page">
-      <h1 className="page-title">Humor Negro</h1>
+    <div className="section-dark">
+      {/* Emojis flotantes decorativos */}
+      <div className="floating-emoji" style={{ top: '15%', right: '8%' }}>💀</div>
+      <div className="floating-emoji" style={{ top: '40%', left: '12%' }}>👻</div>
+      <div className="floating-emoji" style={{ bottom: '10%', right: '15%' }}>🖤</div>
+      
+      <h1 className="section-title dark">Humor Negro</h1>
       <div className="jokes-container">
         {jokes.map((joke) => (
           <JokeCard key={joke.id} joke={joke} />

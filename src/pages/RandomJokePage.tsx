@@ -39,8 +39,13 @@ const RandomJokePage = () => {
   }
 
   return (
-    <div className="random-joke-page">
-      <h1 className="page-title">Generador de Chistes</h1>
+    <div className="section-generator">
+      {/* Emojis flotantes decorativos */}
+      <div className="floating-emoji" style={{ top: '20%', left: '10%' }}>🎲</div>
+      <div className="floating-emoji" style={{ top: '35%', right: '15%' }}>🎮</div>
+      <div className="floating-emoji" style={{ bottom: '15%', left: '20%' }}>🎯</div>
+      
+      <h1 className="section-title generator">Generador de Chistes</h1>
       
       <div className="joke-type-selector">
         <button
@@ -76,7 +81,7 @@ const RandomJokePage = () => {
 
         {currentJoke && (
           <div className="current-joke-container">
-            <JokeCard joke={currentJoke} />
+            <JokeCard joke={currentJoke} isGenerated={true} />
             <button 
               className="share-button"
               onClick={copyJokeLink}
@@ -91,9 +96,11 @@ const RandomJokePage = () => {
             <h2>Últimos chistes generados</h2>
             <div className="history-jokes">
               {history.map((joke, index) => (
-                <div key={index} className="history-joke">
-                  <p>{joke.content}</p>
-                </div>
+                <JokeCard 
+                  key={index} 
+                  joke={joke} 
+                  isGenerated={true}
+                />
               ))}
             </div>
           </div>

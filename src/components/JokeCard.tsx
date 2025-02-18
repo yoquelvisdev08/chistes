@@ -7,9 +7,10 @@ interface JokeCardProps {
   joke: Joke;
   onReactionUpdate?: (jokeId: string, newReactions: Joke['reactions']) => void;
   onDelete?: (id: string) => void;
+  isGenerated?: boolean;
 }
 
-const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
+const JokeCard = ({ joke, onReactionUpdate, onDelete, isGenerated = false }: JokeCardProps) => {
   // Estado para las reacciones totales
   const [totalReactions, setTotalReactions] = useState(joke.reactions)
   
@@ -141,7 +142,7 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
           <img
             src={joke.imageUrl}
             alt="Imagen del chiste"
-            className="w-full h-48 object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-48 object-cover rounded-xl"
           />
         </div>
       )}
@@ -150,34 +151,36 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
         <p className="text-lg font-medium leading-relaxed">{joke.content}</p>
       </div>
 
-      <div className="joke-reactions flex justify-center gap-4">
-        <button
-          onClick={() => handleReaction('laugh')}
-          className={`reaction-button laugh ${userReactions.laugh ? 'active' : ''}`}
-          disabled={isReacting || userReactions.laugh}
-        >
-          <span className="text-2xl">😂</span>
-          <span className="font-semibold">{totalReactions.laugh || 0}</span>
-        </button>
+      {!isGenerated && (
+        <div className="joke-reactions flex justify-center gap-4">
+          <button
+            onClick={() => handleReaction('laugh')}
+            className={`reaction-button laugh ${userReactions.laugh ? 'active' : ''}`}
+            disabled={isReacting || userReactions.laugh}
+          >
+            <span className="text-2xl">😂</span>
+            <span className="font-semibold">{totalReactions.laugh || 0}</span>
+          </button>
 
-        <button
-          onClick={() => handleReaction('sad')}
-          className={`reaction-button sad ${userReactions.sad ? 'active' : ''}`}
-          disabled={isReacting || userReactions.sad}
-        >
-          <span className="text-2xl">😢</span>
-          <span className="font-semibold">{totalReactions.sad || 0}</span>
-        </button>
+          <button
+            onClick={() => handleReaction('sad')}
+            className={`reaction-button sad ${userReactions.sad ? 'active' : ''}`}
+            disabled={isReacting || userReactions.sad}
+          >
+            <span className="text-2xl">😢</span>
+            <span className="font-semibold">{totalReactions.sad || 0}</span>
+          </button>
 
-        <button
-          onClick={() => handleReaction('puke')}
-          className={`reaction-button puke ${userReactions.puke ? 'active' : ''}`}
-          disabled={isReacting || userReactions.puke}
-        >
-          <span className="text-2xl">🤮</span>
-          <span className="font-semibold">{totalReactions.puke || 0}</span>
-        </button>
-      </div>
+          <button
+            onClick={() => handleReaction('puke')}
+            className={`reaction-button puke ${userReactions.puke ? 'active' : ''}`}
+            disabled={isReacting || userReactions.puke}
+          >
+            <span className="text-2xl">🤮</span>
+            <span className="font-semibold">{totalReactions.puke || 0}</span>
+          </button>
+        </div>
+      )}
 
       <div className="mt-4 text-right">
         <span className="text-sm text-gray-500 dark:text-gray-400 italic">
@@ -193,7 +196,7 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
         >
           💾
         </button>
-        {onDelete && (
+        {onDelete && !isGenerated && (
           <button
             onClick={() => onDelete(joke.id)}
             className="save-button"

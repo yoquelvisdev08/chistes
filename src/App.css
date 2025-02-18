@@ -106,30 +106,190 @@ body {
   box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
 }
 
-/* Estilos base de las tarjetas */
-.joke-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(127, 61, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: none;
-  padding: 1.5rem;
-  min-height: 180px;
-  position: relative;
+/* Estilos mejorados para todas las tarjetas */
+.joke-card, .generated-joke-card {
   display: flex;
   flex-direction: column;
-  cursor: default;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+  justify-content: space-between;
+  min-height: 200px;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Grid de chistes - 5 tarjetas por fila */
-.jokes-container, .history-jokes {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
+/* Contenido del chiste */
+.joke-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.joke-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+  color: #333;
+}
+
+/* Contenedor de botones */
+.joke-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos mejorados para los botones */
+.action-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.action-button.delete {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
+}
+
+.action-button.edit {
+  background: rgba(127, 61, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.action-button.add {
+  background: rgba(0, 200, 0, 0.1);
+  color: #00a000;
+}
+
+/* Iconos para los botones */
+.action-button.delete::before {
+  content: '🗑️';
+}
+
+.action-button.edit::before {
+  content: '✏️';
+}
+
+.action-button.add::before {
+  content: '➕';
+}
+
+/* Hover effects */
+.action-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+}
+
+/* Modo oscuro */
+.app.dark-mode .joke-card,
+.app.dark-mode .generated-joke-card {
+  background: var(--dark-card-bg);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.app.dark-mode .joke-content p {
+  color: var(--dark-text);
+}
+
+.app.dark-mode .joke-actions {
+  border-top-color: rgba(255, 0, 0, 0.2);
+}
+
+/* Meta información */
+.joke-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Reacciones */
+.joke-reactions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.reaction-button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(127, 61, 255, 0.1);
+}
+
+/* Fecha */
+.joke-date {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Ajustes específicos para el generador */
+.generated-joke-preview {
+  text-align: center;
   padding: 2rem;
-  max-width: 1400px;
+  border-radius: 15px;
+  background: rgba(127, 61, 255, 0.05);
+}
+
+.app.dark-mode .generated-joke-preview {
+  background: rgba(255, 0, 0, 0.05);
+}
+
+/* Tipo de chiste */
+.joke-type {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.joke-type.normal {
+  background: rgba(127, 61, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.joke-type.dark {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--dark-primary);
+}
+
+/* Grid de chistes - 3 tarjetas por fila para todas las secciones */
+.jokes-container, 
+.history-jokes,
+.generated-jokes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -142,35 +302,6 @@ body {
     rgba(182, 159, 255, 0.1)
   );
   border: 1px solid rgba(127, 61, 255, 0.2);
-}
-
-/* Contenido del chiste actualizado */
-.joke-content {
-  flex: 1;
-  margin-bottom: 1.5rem;
-  z-index: 1;
-  padding-bottom: 2.5rem;
-  padding-left: 3.5rem;
-}
-
-.joke-content p {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #333;
-  font-weight: 500;
-}
-
-.app.dark-mode .joke-content p {
-  color: var(--dark-text);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Meta información */
-.joke-meta {
-  margin-top: auto;
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
-  z-index: 1;
 }
 
 /* Modo oscuro */
@@ -195,28 +326,24 @@ body {
   border-top-color: rgba(255, 0, 0, 0.2);
 }
 
-/* Responsive para el grid */
-@media (max-width: 1400px) {
-  .jokes-container, .history-jokes {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
+/* Responsive para todos los grids de chistes */
 @media (max-width: 1100px) {
-  .jokes-container, .history-jokes {
-    grid-template-columns: repeat(3, 1fr);
+  .jokes-container, 
+  .history-jokes,
+  .generated-jokes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .jokes-container, .history-jokes {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .jokes-container, .history-jokes {
+  .jokes-container, 
+  .history-jokes,
+  .generated-jokes-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
   }
 }
 
@@ -1281,18 +1408,103 @@ body {
 
 /* Estilos para las tarjetas de chistes generados */
 .generated-joke-card {
-  background: white;
-  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
   padding: 1.5rem;
+  background: white;
+  border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  margin-bottom: 1rem;
 }
 
+/* Contenido del chiste en el Dashboard */
+.generated-joke-card .joke-content {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 2rem; /* Espacio para los botones */
+}
+
+.generated-joke-card .joke-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Contenedor de botones en el Dashboard */
+.generated-joke-card .joke-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white; /* O el color que prefieras */
+  border-radius: 0 0 15px 15px;
+  padding: 1rem;
+}
+
+/* Botones de acción en el Dashboard */
+.generated-joke-card .action-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Modo oscuro para el Dashboard */
 .app.dark-mode .generated-joke-card {
   background: var(--dark-card-bg);
   border: 1px solid rgba(255, 0, 0, 0.2);
 }
 
+.app.dark-mode .generated-joke-card .joke-actions {
+  background: var(--dark-card-bg);
+  border-top: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+/* Meta información en el Dashboard */
+.generated-joke-card .joke-meta {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.app.dark-mode .generated-joke-card .joke-meta {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Tipo de chiste en el Dashboard */
+.generated-joke-card .joke-type {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Fecha en el Dashboard */
+.generated-joke-card .joke-date {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Hover effects para el Dashboard */
 .generated-joke-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -1302,59 +1514,203 @@ body {
   box-shadow: 0 8px 15px rgba(255, 0, 0, 0.2);
 }
 
-/* Botones de acción */
-.action-button {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+/* Estilos para las secciones principales */
+.section-normal {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 250, 0.8));
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.action-button.delete {
-  background: rgba(255, 0, 0, 0.1);
-  color: #ff0000;
+.section-dark {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.action-button.edit {
-  background: rgba(127, 61, 255, 0.1);
-  color: var(--primary-color);
+.section-generator {
+  background: linear-gradient(135deg, #f8f8f8, #f0f0f0);
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.action-button.add {
-  background: rgba(0, 200, 0, 0.1);
-  color: #00a000;
+/* Elementos decorativos flotantes */
+.floating-emoji {
+  position: absolute;
+  opacity: 0.1;
+  animation: float 15s infinite ease-in-out;
+  pointer-events: none;
 }
 
-.app.dark-mode .action-button {
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(20px, -20px) rotate(5deg); }
+  50% { transform: translate(-20px, -40px) rotate(-5deg); }
+  75% { transform: translate(20px, -20px) rotate(5deg); }
+}
+
+/* Contenedor de tarjetas mejorado */
+.jokes-container {
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Tarjetas mejoradas */
+.joke-card {
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  transform-style: preserve-3d;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.joke-card:hover {
+  transform: translateY(-10px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de guardar en chistes generados */
+.generated-joke-card .save-button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--gradient-light);
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.app.dark-mode .action-button.delete {
-  background: rgba(255, 0, 0, 0.2);
+.generated-joke-card .save-button:hover {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.app.dark-mode .action-button.edit {
-  background: rgba(127, 61, 255, 0.2);
+/* Títulos de sección mejorados */
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 2rem;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  position: relative;
 }
 
-.app.dark-mode .action-button.add {
-  background: rgba(0, 200, 0, 0.2);
+.section-title.normal {
+  background-image: var(--gradient-light);
 }
 
-.action-button:hover {
-  transform: translateY(-2px);
+.section-title.dark {
+  background-image: var(--dark-gradient);
 }
 
-.action-button.delete:hover {
-  background: rgba(255, 0, 0, 0.2);
+.section-title.generator {
+  background-image: linear-gradient(135deg, #9333EA, #4F46E5);
 }
 
-.action-button.edit:hover {
-  background: rgba(127, 61, 255, 0.2);
+/* Animaciones para los elementos */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
-.action-button.add:hover {
-  background: rgba(0, 200, 0, 0.2);
+@keyframes shine {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Estilos del Footer */
+.footer {
+  width: 100%;
+  padding: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #333;
+}
+
+/* Footer en modo oscuro */
+.app.dark-mode .footer {
+  background: rgba(30, 30, 30, 0.9);
+  border-top: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.app.dark-mode .footer-text,
+.app.dark-mode .footer-links a {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.app.dark-mode .footer-links a:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

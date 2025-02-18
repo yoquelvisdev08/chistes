@@ -26,8 +26,13 @@ const HomePage = () => {
   if (loading) return <LoadingSpinner />
 
   return (
-    <div className="home-page">
-      <h1>Chistes Normales</h1>
+    <div className="section-normal">
+      {/* Emojis flotantes decorativos */}
+      <div className="floating-emoji" style={{ top: '10%', left: '5%' }}>😄</div>
+      <div className="floating-emoji" style={{ top: '30%', right: '10%' }}>😂</div>
+      <div className="floating-emoji" style={{ bottom: '20%', left: '15%' }}>🤣</div>
+      
+      <h1 className="section-title normal">Chistes Normales</h1>
       <div className="jokes-container">
         {jokes.map((joke) => (
           <JokeCard key={joke.id} joke={joke} />
