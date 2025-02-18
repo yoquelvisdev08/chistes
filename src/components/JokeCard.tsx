@@ -135,11 +135,60 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
   })
 
   return (
-    <div id={`joke-${joke.id}`} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden relative">
-      <div className="absolute top-2 right-2 flex space-x-2 z-10">
+    <div id={`joke-${joke.id}`} className="joke-card group">
+      {joke.imageUrl && (
+        <div className="joke-image-container mb-4">
+          <img
+            src={joke.imageUrl}
+            alt="Imagen del chiste"
+            className="w-full h-48 object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      )}
+
+      <div className="joke-content">
+        <p className="text-lg font-medium leading-relaxed">{joke.content}</p>
+      </div>
+
+      <div className="joke-reactions flex justify-center gap-4">
+        <button
+          onClick={() => handleReaction('laugh')}
+          className={`reaction-button laugh ${userReactions.laugh ? 'active' : ''}`}
+          disabled={isReacting || userReactions.laugh}
+        >
+          <span className="text-2xl">😂</span>
+          <span className="font-semibold">{totalReactions.laugh || 0}</span>
+        </button>
+
+        <button
+          onClick={() => handleReaction('sad')}
+          className={`reaction-button sad ${userReactions.sad ? 'active' : ''}`}
+          disabled={isReacting || userReactions.sad}
+        >
+          <span className="text-2xl">😢</span>
+          <span className="font-semibold">{totalReactions.sad || 0}</span>
+        </button>
+
+        <button
+          onClick={() => handleReaction('puke')}
+          className={`reaction-button puke ${userReactions.puke ? 'active' : ''}`}
+          disabled={isReacting || userReactions.puke}
+        >
+          <span className="text-2xl">🤮</span>
+          <span className="font-semibold">{totalReactions.puke || 0}</span>
+        </button>
+      </div>
+
+      <div className="mt-4 text-right">
+        <span className="text-sm text-gray-500 dark:text-gray-400 italic">
+          {formatDate(joke.createdAt)}
+        </span>
+      </div>
+
+      <div className="joke-actions">
         <button
           onClick={saveAsImage}
-          className="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+          className="save-button"
           title="Guardar como imagen"
         >
           💾
@@ -147,70 +196,12 @@ const JokeCard = ({ joke, onReactionUpdate, onDelete }: JokeCardProps) => {
         {onDelete && (
           <button
             onClick={() => onDelete(joke.id)}
-            className="p-2 text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+            className="save-button"
             title="Eliminar chiste"
           >
             🗑️
           </button>
         )}
-      </div>
-
-      {joke.imageUrl && (
-        <div className="w-full h-48 overflow-hidden">
-          <img 
-            src={joke.imageUrl}
-            alt="Imagen del chiste"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error('Error al cargar la imagen:', e)
-              e.currentTarget.style.display = 'none'
-            }}
-          />
-        </div>
-      )}
-
-      <div className="p-4">
-        <p className="text-gray-800 dark:text-gray-200 text-lg">{joke.content}</p>
-        
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex justify-center space-x-4">
-            {/* Botón de risa */}
-            <button 
-              type="button"
-              onClick={() => handleReaction('laugh')} 
-              className={`reaction-button laugh ${userReactions.laugh ? 'active' : ''}`}
-              disabled={isReacting || userReactions.laugh}
-            >
-              <span className="reaction-icon">😂</span>
-              <span className="reaction-count">{totalReactions.laugh || 0}</span>
-            </button>
-
-            {/* Botón de tristeza */}
-            <button 
-              type="button"
-              onClick={() => handleReaction('sad')} 
-              className={`reaction-button sad ${userReactions.sad ? 'active' : ''}`}
-              disabled={isReacting || userReactions.sad}
-            >
-              <span className="reaction-icon">😢</span>
-              <span className="reaction-count">{totalReactions.sad || 0}</span>
-            </button>
-
-            {/* Botón de asco */}
-            <button 
-              type="button"
-              onClick={() => handleReaction('puke')} 
-              className={`reaction-button puke ${userReactions.puke ? 'active' : ''}`}
-              disabled={isReacting || userReactions.puke}
-            >
-              <span className="reaction-icon">🤮</span>
-              <span className="reaction-count">{totalReactions.puke || 0}</span>
-            </button>
-          </div>
-          <span className="text-sm text-gray-500 dark:text-gray-400 block text-right mt-2">
-            {formatDate(joke.createdAt)}
-          </span>
-        </div>
       </div>
     </div>
   )

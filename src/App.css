@@ -1,18 +1,20 @@
-/* Variables de color */
+/* Variables de color actualizadas */
 :root {
-  --primary-color: #FF4B91;
-  --secondary-color: #FFB4B4;
-  --accent-color: #FFDDD2;
-  --dark-primary: #1E1E1E;
-  --dark-secondary: #FF3333;
+  /* Colores para chistes normales */
+  --primary-color: #7F3DFF;
+  --secondary-color: #EEE5FF;
+  --accent-color: #B69FFF;
+  --background-light: #FAFAFE;
+  --gradient-light: linear-gradient(135deg, #7F3DFF, #B69FFF);
+  
+  /* Colores para humor negro */
+  --dark-primary: #FF3434;
+  --dark-secondary: #1E1E1E;
   --dark-accent: #FF0000;
   --dark-text: #FFFFFF;
   --dark-gradient: linear-gradient(135deg, #FF0000, #800000);
   --dark-card-bg: #2A2A2A;
   --dark-hover: #FF1A1A;
-  --gradient-light: linear-gradient(135deg, #FF4B91, #FFB4B4);
-  --gradient-dark: linear-gradient(135deg, #FF3333, #990000);
-  --background-light: #f8f9fa;
   --background-dark: #121212;
 }
 
@@ -41,18 +43,21 @@ body {
 
 /* Navbar actualizado */
 .navbar {
-  background: var(--gradient-light);
-  padding: 0.8rem 2rem; /* Altura reducida */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
   transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(127, 61, 255, 0.1);
 }
 
 .app.dark-mode .navbar {
-  background: var(--dark-gradient);
-  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
-  border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+  background: rgba(30, 30, 30, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.15);
 }
 
 /* Contenedor de navegación */
@@ -73,28 +78,31 @@ body {
 
 /* Enlaces */
 .nav-links a {
-  color: white;
+  color: var(--primary-color);
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
   transition: all 0.3s ease;
   font-weight: 600;
   font-size: 1rem;
-  background: rgba(255,255,255,0.1);
+  background: rgba(127, 61, 255, 0.1);
 }
 
 .app.dark-mode .nav-links a {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  padding: 0.8rem 1.5rem;
+  color: var(--dark-text);
+  background: rgba(255, 0, 0, 0.1);
   border: 1px solid rgba(255, 0, 0, 0.2);
-  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  background: var(--gradient-light);
+  color: white;
+  transform: translateY(-2px);
 }
 
 .app.dark-mode .nav-links a:hover {
-  background: rgba(255, 0, 0, 0.2);
+  background: var(--dark-gradient);
   border-color: var(--dark-hover);
-  transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
 }
 
@@ -102,16 +110,17 @@ body {
 .joke-card {
   background: white;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-  transition: all 0.4s ease;
+  box-shadow: 0 8px 32px rgba(127, 61, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   padding: 1.5rem;
-  min-height: 200px;
+  min-height: 180px;
   position: relative;
   display: flex;
   flex-direction: column;
   cursor: default;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 /* Grid de chistes */
@@ -126,21 +135,34 @@ body {
 
 /* Efectos hover en las tarjetas */
 .joke-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(127, 61, 255, 0.2);
+  background: linear-gradient(145deg, 
+    rgba(127, 61, 255, 0.05), 
+    rgba(182, 159, 255, 0.1)
+  );
+  border: 1px solid rgba(127, 61, 255, 0.2);
 }
 
-/* Contenido del chiste */
+/* Contenido del chiste actualizado */
 .joke-content {
   flex: 1;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   z-index: 1;
+  padding-bottom: 2.5rem;
+  padding-left: 3.5rem;
 }
 
 .joke-content p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: #333;
+  font-weight: 500;
+}
+
+.app.dark-mode .joke-content p {
+  color: var(--dark-text);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Meta información */
@@ -153,20 +175,20 @@ body {
 
 /* Modo oscuro */
 .app.dark-mode .joke-card {
-  background: var(--dark-card-bg);
-  border: 1px solid rgba(255, 0, 0, 0.1);
-  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.15);
+  background: rgba(42, 42, 42, 0.95);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(255, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
 }
 
 .app.dark-mode .joke-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(255, 0, 0, 0.25);
-  border-color: var(--dark-hover);
-  background: linear-gradient(145deg, #2A2A2A, #1E1E1E);
-}
-
-.app.dark-mode .joke-content p {
-  color: var(--dark-text);
+  background: linear-gradient(145deg, 
+    rgba(255, 52, 52, 0.1), 
+    rgba(128, 0, 0, 0.2)
+  );
+  border-color: rgba(255, 0, 0, 0.4);
 }
 
 .app.dark-mode .joke-meta {
@@ -191,10 +213,6 @@ body {
     grid-template-columns: 1fr;
     padding: 1rem;
   }
-
-  .joke-card {
-    min-height: 180px;
-  }
 }
 
 /* Mantener los estilos de reacciones pero ajustar su posición */
@@ -211,51 +229,62 @@ body {
 .joke-card::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: -1px;
   background: var(--gradient-light);
+  z-index: -1;
+  border-radius: 20px;
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none;
 }
 
 .joke-card:hover::after {
-  opacity: 0.05;
+  opacity: 0.1;
 }
 
 .app.dark-mode .joke-card::after {
-  background: linear-gradient(45deg, 
-    rgba(255, 0, 0, 0.1), 
-    rgba(255, 0, 0, 0)
-  );
+  background: var(--dark-gradient);
 }
 
-/* Contenedor de acciones */
+.app.dark-mode .joke-card:hover::after {
+  opacity: 0.2;
+}
+
+/* Actualizar el contenedor de acciones */
 .joke-actions {
   position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
+  bottom: 1rem;
+  left: 1rem;
   display: flex;
   gap: 0.5rem;
   z-index: 10;
 }
 
-/* Botón de guardar */
+/* Rediseño del botón de guardar */
 .save-button {
-  background: none;
+  background: rgba(127, 61, 255, 0.1);
   border: none;
-  padding: 0.4rem;
+  padding: 0.5rem;
   cursor: pointer;
-  font-size: 1rem;
-  opacity: 0.6;
-  transition: all 0.2s ease;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  opacity: 0.8;
 }
 
-.save-button:hover {
+/* Estilos para modo oscuro */
+.app.dark-mode .save-button {
+  background: rgba(255, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Eliminar efectos hover y animaciones innecesarias */
+.joke-card:hover .joke-actions {
   opacity: 1;
-  transform: scale(1.1);
 }
 
 /* Botón de eliminar */
@@ -278,10 +307,10 @@ body {
 /* Contenedor de imagen */
 .joke-image-container {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   border-radius: 8px;
   overflow: hidden;
-  max-height: 200px;
+  max-height: 150px;
 }
 
 .joke-image {
@@ -291,37 +320,43 @@ body {
   display: block;
 }
 
+.joke-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.joke-card:hover .joke-image img {
+  transform: scale(1.05);
+}
+
 /* Modo oscuro */
-.app.dark-mode .save-button,
 .app.dark-mode .delete-button {
   color: rgba(255,255,255,0.6);
 }
 
-.app.dark-mode .save-button:hover,
 .app.dark-mode .delete-button:hover {
   color: rgba(255,255,255,1);
 }
 
-/* Títulos */
+/* Títulos actualizados */
 .page-title {
-  color: var(--primary-color);
   text-align: center;
-  margin: 2rem 0;
-  font-size: 3rem;
+  margin: 3rem 0;
+  font-size: 3.5rem;
   font-weight: 800;
+  background: var(--gradient-light);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titlePulse 3s ease-in-out infinite;
 }
 
 .app.dark-mode .page-title {
-  color: var(--dark-text);
-  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5),
-               0 0 20px rgba(255, 0, 0, 0.3),
-               0 0 30px rgba(255, 0, 0, 0.2);
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 3rem;
-  position: relative;
-  text-transform: uppercase;
+  background: var(--dark-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
 }
 
 /* Contenedor principal */
@@ -410,9 +445,8 @@ body {
 
 /* Animaciones adicionales */
 @keyframes titlePulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
 }
 
 @keyframes float {
@@ -686,24 +720,16 @@ body {
 .app.dark-mode .joke-card::after {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
-    #FF0000, 
-    #FF3333, 
-    #FF0000, 
-    #800000
-  );
-  border-radius: 20px;
+  inset: -1px;
+  background: var(--dark-gradient);
   z-index: -1;
+  border-radius: 24px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .app.dark-mode .joke-card:hover::after {
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 /* Animación del título */
@@ -725,32 +751,33 @@ body {
   align-items: center;
 }
 
-/* Botones de reacción */
+/* Botones de reacción actualizados */
 .reaction-button {
-  background: none;
+  background: rgba(127, 61, 255, 0.1);
   border: none;
   padding: 0.6rem 1rem;
-  cursor: pointer !important;
+  border-radius: 12px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  transition: all 0.2s ease;
-  border-radius: 20px;
-  background: rgba(0,0,0,0.05);
-  min-width: 70px;
-  position: relative;
-  z-index: 3;
-  pointer-events: auto !important;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
 }
 
-/* Icono de reacción */
-.reaction-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.app.dark-mode .reaction-button {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--dark-text);
+}
+
+.reaction-button:hover {
+  transform: translateY(-2px);
+  background: var(--gradient-light);
+  color: white;
+}
+
+.app.dark-mode .reaction-button:hover {
+  background: var(--dark-gradient);
 }
 
 /* Contador de reacciones */
@@ -847,26 +874,6 @@ body {
 .joke-card::before,
 .joke-card::after {
   pointer-events: none;
-}
-
-/* Contenedor de imagen */
-.joke-image {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-  overflow: hidden;
-  max-height: 200px;
-}
-
-.joke-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.joke-card:hover .joke-image img {
-  transform: scale(1.05);
 }
 
 /* Ajustar el formulario del Dashboard para incluir imagen */

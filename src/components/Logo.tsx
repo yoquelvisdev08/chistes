@@ -12,31 +12,31 @@ const Logo = ({ isDark = false }: { isDark?: boolean }) => {
         cx="50" 
         cy="50" 
         r="45" 
-        fill={isDark ? '#1a1a1a' : '#fff'} 
-        stroke={isDark ? '#fff' : '#1a1a1a'} 
+        fill={isDark ? '#FF3434' : '#7F3DFF'} 
+        stroke={isDark ? '#fff' : '#B69FFF'} 
         strokeWidth="5"
         className="logo-circle"
       />
       <circle 
         cx="35" 
         cy="40" 
-        r="5" 
+        r="8" 
         fill={isDark ? '#fff' : '#1a1a1a'}
-        className="logo-eye"
+        className="logo-eye animate-bounce"
       />
       <circle 
         cx="65" 
         cy="40" 
-        r="5" 
+        r="8" 
         fill={isDark ? '#fff' : '#1a1a1a'}
-        className="logo-eye"
+        className="logo-eye animate-bounce"
       />
       <path
-        d="M30 65 Q50 80 70 65"
+        d="M30 65 Q50 85 70 65"
         stroke={isDark ? '#fff' : '#1a1a1a'}
-        strokeWidth="5"
+        strokeWidth="6"
         strokeLinecap="round"
-        className="logo-smile"
+        className="logo-smile animate-pulse"
       />
     </svg>
   )
