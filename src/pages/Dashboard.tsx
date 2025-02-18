@@ -494,22 +494,22 @@ const Dashboard = () => {
                       <div key={joke.id} className="generated-joke-card">
                         <div className="joke-content">
                           <p>{joke.content}</p>
-                          <div className="joke-meta">
-                            <span className="joke-type">
-                              {joke.type === 'normal' ? 'Normal' : 'Humor Negro'}
-                            </span>
-                            <span className="joke-date">
-                              Generado: {new Date(joke.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
                         </div>
+                        
+                        <div className="joke-meta">
+                          <span className="joke-type">{joke.type}</span>
+                          <span className="joke-date">Generado: {new Date(joke.createdAt).toLocaleDateString()}</span>
+                        </div>
+
                         <div className="joke-actions">
                           <button
                             onClick={() => handleDelete(joke.id)}
                             className="action-button delete"
+                            title="Eliminar"
                           >
-                            🗑️ Eliminar
+                            🗑️
                           </button>
+                          
                           <button
                             onClick={() => {
                               setContent(joke.content);
@@ -517,9 +517,11 @@ const Dashboard = () => {
                               setActiveTab('add');
                             }}
                             className="action-button edit"
+                            title="Editar"
                           >
-                            ✏️ Editar
+                            ✏️
                           </button>
+                          
                           <button
                             onClick={async () => {
                               try {
@@ -537,8 +539,9 @@ const Dashboard = () => {
                               }
                             }}
                             className="action-button add"
+                            title="Añadir a Colección"
                           >
-                            ➕ Añadir a Colección
+                            ➕
                           </button>
                         </div>
                       </div>
@@ -558,21 +561,28 @@ const Dashboard = () => {
                 <div key={joke.id} className="instagram-joke-card">
                   <div className="preview-container">
                     <div className="instagram-preview" id={`preview-${joke.id}`}>
-                      <span className="preview-emoji top-left">
-                        {joke.type === 'normal' ? '😂' : '💀'}
-                      </span>
-                      <span className="preview-emoji top-right">
-                        {joke.type === 'normal' ? '🤣' : '🖤'}
-                      </span>
+                      <div className="emoji-top">
+                        <span className="preview-emoji">
+                          {joke.type === 'normal' ? '😂' : '💀'}
+                        </span>
+                        <span className="preview-emoji">
+                          {joke.type === 'normal' ? '🤣' : '🖤'}
+                        </span>
+                      </div>
+                      
                       <div className="joke-text-container">
                         <p className="joke-text">{joke.content}</p>
                       </div>
-                      <span className="preview-emoji bottom-left">
-                        {joke.type === 'normal' ? '😆' : '👻'}
-                      </span>
-                      <span className="preview-emoji bottom-right">
-                        {joke.type === 'normal' ? '😅' : '🔪'}
-                      </span>
+                      
+                      <div className="emoji-bottom">
+                        <span className="preview-emoji">
+                          {joke.type === 'normal' ? '😆' : '👻'}
+                        </span>
+                        <span className="preview-emoji">
+                          {joke.type === 'normal' ? '😅' : '🔪'}
+                        </span>
+                      </div>
+                      
                       <div className="watermark">@tuapp</div>
                     </div>
                   </div>
