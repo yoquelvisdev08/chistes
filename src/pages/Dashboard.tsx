@@ -6,6 +6,7 @@ import JokeCard from '../components/JokeCard'
 import DashboardJokeCard from '../components/DashboardJokeCard'
 import { jokeApiService } from '../services/jokeApiService'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { generateInstagramImage } from '../utils/instagramUtils'
 
 // Añadir un tipo para el estado del generador
 type GeneratorState = {
@@ -21,7 +22,7 @@ const Dashboard = () => {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [jokes, setJokes] = useState<Joke[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'add' | 'normal' | 'dark' | 'generated'>('add')
+  const [activeTab, setActiveTab] = useState<'add' | 'normal' | 'dark' | 'generated' | 'instagram'>('add')
   const [generatedJoke, setGeneratedJoke] = useState<Joke | null>(null)
   const [generating, setGenerating] = useState(false)
   const [lastGeneratedJokes, setLastGeneratedJokes] = useState<Joke[]>([])
@@ -225,50 +226,81 @@ const Dashboard = () => {
     }
   };
 
+  const handleGenerateInstagramImage = async (jokeId: string) => {
+    try {
+      // Mostrar un indicador de carga o feedback
+      const element = document.getElementById(`preview-${jokeId}`);
+      if (!element) {
+        throw new Error('No se encontró el elemento a exportar');
+      }
+
+      // Ocultar temporalmente el botón y los hashtags para la captura
+      const card = element.closest('.instagram-joke-card');
+      if (card) {
+        const button = card.querySelector('.instagram-button');
+        const hashtags = card.querySelector('.hashtags-container');
+        if (button) button.style.display = 'none';
+        if (hashtags) hashtags.style.display = 'none';
+      }
+
+      // Generar y descargar la imagen
+      await generateInstagramImage(`preview-${jokeId}`);
+
+      // Restaurar los elementos ocultos
+      if (card) {
+        const button = card.querySelector('.instagram-button');
+        const hashtags = card.querySelector('.hashtags-container');
+        if (button) button.style.display = 'block';
+        if (hashtags) hashtags.style.display = 'block';
+      }
+
+      // Mostrar mensaje de éxito
+      alert('¡Imagen generada con éxito!');
+    } catch (error) {
+      console.error('Error al generar la imagen:', error);
+      alert('Error al generar la imagen. Por favor, intenta de nuevo.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-8">
         {/* Tabs de navegación actualizadas */}
-        <div className="flex space-x-4 mb-8">
-          <button
+        <div className="tabs">
+          <button 
+            className={`tab ${activeTab === 'add' ? 'active' : ''}`}
+            data-tab="add"
             onClick={() => setActiveTab('add')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'add'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
           >
-            Añadir Chiste
+            Añadir
           </button>
-          <button
-            onClick={() => setActiveTab('generated')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'generated'
-                ? 'bg-accent text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            Generados ({jokes.filter(j => j.isGenerated).length})
-          </button>
-          <button
+          <button 
+            className={`tab ${activeTab === 'normal' ? 'active' : ''}`}
+            data-tab="normal"
             onClick={() => setActiveTab('normal')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'normal'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
           >
-            Chistes Normales ({normalJokes.length})
+            Chistes Normales
           </button>
-          <button
+          <button 
+            className={`tab ${activeTab === 'dark' ? 'active' : ''}`}
+            data-tab="dark"
             onClick={() => setActiveTab('dark')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'dark'
-                ? 'bg-dark-secondary text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
           >
-            Humor Negro ({darkJokes.length})
+            Humor Negro
+          </button>
+          <button 
+            className={`tab ${activeTab === 'generated' ? 'active' : ''}`}
+            data-tab="generated"
+            onClick={() => setActiveTab('generated')}
+          >
+            Generados
+          </button>
+          <button 
+            className={`tab ${activeTab === 'instagram' ? 'active' : ''}`}
+            data-tab="instagram"
+            onClick={() => setActiveTab('instagram')}
+          >
+            Instagram
           </button>
         </div>
 
@@ -514,6 +546,37 @@ const Dashboard = () => {
                   )}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'instagram' && (
+          <div className="instagram-section">
+            <h2 className="text-2xl font-bold mb-6">Preparar Posts para Instagram</h2>
+            <div className="jokes-container">
+              {jokes.map(joke => (
+                <div key={joke.id} className="instagram-joke-card">
+                  <div className="preview-container">
+                    <div className="instagram-preview" id={`preview-${joke.id}`}>
+                      <p className="joke-text">{joke.content}</p>
+                      <div className="watermark">@tuapp</div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => handleGenerateInstagramImage(joke.id)}
+                    className="instagram-button"
+                  >
+                    Preparar para Instagram
+                  </button>
+                  <div className="hashtags-container">
+                    <p>Hashtags Sugeridos</p>
+                    <p>
+                      #chistes #humor {joke.type === 'normal' ? '#chistesdivertidos' : '#humornegro'} 
+                      #risas #memes #comedia #viral #reels #entretenimiento
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
