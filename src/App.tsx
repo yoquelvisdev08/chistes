@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import DarkHumorPage from './pages/DarkHumorPage'
 import Dashboard from './pages/Dashboard'
 import RandomJokePage from './pages/RandomJokePage'
+import JokeDetailPage from './pages/JokeDetailPage'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -21,6 +22,7 @@ function AppContent() {
           <Route path="/dark-humor" element={<DarkHumorPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/random" element={<RandomJokePage />} />
+          <Route path="/joke/:id" element={<JokeDetailPage />} />
         </Routes>
       </main>
       <Footer />

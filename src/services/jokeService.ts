@@ -114,5 +114,29 @@ export const jokeService = {
     if (error) {
       throw new Error(`Error al eliminar el chiste: ${error.message}`)
     }
+  },
+
+  async getJokeById(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from('jokes')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+      if (!data) throw new Error('Chiste no encontrado');
+
+      return {
+        id: data.id,
+        content: data.content,
+        type: data.type,
+        createdAt: data.created_at,
+        reactions: data.reactions || { laugh: 0, sad: 0, puke: 0 }
+      };
+    } catch (error) {
+      console.error('Error al obtener el chiste:', error);
+      throw error;
+    }
   }
 } 

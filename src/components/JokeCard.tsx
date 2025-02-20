@@ -21,14 +21,8 @@ interface JokeCardProps {
 }
 
 const JokeCard: React.FC<JokeCardProps> = ({ joke, onReaction, onDelete, isGenerated = false }) => {
-  // Asegurarnos de que reactions siempre tenga un valor por defecto
-  const defaultReactions = {
-    laugh: 0,
-    sad: 0,
-    puke: 0
-  };
-
-  const reactions = joke.reactions || defaultReactions;
+  const [showMenu, setShowMenu] = useState(false);
+  const reactions = joke.reactions || { laugh: 0, sad: 0, puke: 0 };
 
   // Estado para las reacciones totales
   const [totalReactions, setTotalReactions] = useState(reactions)
@@ -147,6 +141,22 @@ const JokeCard: React.FC<JokeCardProps> = ({ joke, onReaction, onDelete, isGener
     }
   }
 
+  const copyJoke = () => {
+    navigator.clipboard.writeText(joke.content);
+    alert('Chiste copiado al portapapeles!');
+    setShowMenu(false);
+  };
+
+  const generateShareLink = () => {
+    // Crear un link corto con el ID del chiste
+    const baseUrl = window.location.origin;
+    const shareLink = `${baseUrl}/joke/${joke.id}`;
+    
+    navigator.clipboard.writeText(shareLink);
+    alert('Link copiado al portapapeles!');
+    setShowMenu(false);
+  };
+
   // Añadir log en el render para ver qué valores se están mostrando
   console.log('Renderizando JokeCard con:', {
     totalReactions,
@@ -155,7 +165,31 @@ const JokeCard: React.FC<JokeCardProps> = ({ joke, onReaction, onDelete, isGener
   })
 
   return (
-    <div id={`joke-${joke.id}`} className="joke-card group">
+    <div id={`joke-${joke.id}`} className="joke-card group relative">
+      {!isGenerated && (
+        <div className="card-menu">
+          <button 
+            className="menu-dots"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            ⋮
+          </button>
+          {showMenu && (
+            <div className="menu-options">
+              <button onClick={copyJoke}>
+                📋 Copiar Chiste
+              </button>
+              <button onClick={saveAsImage}>
+                💾 Guardar como Imagen
+              </button>
+              <button onClick={generateShareLink}>
+                🔗 Compartir Link
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {joke.imageUrl && (
         <div className="joke-image-container mb-4">
           <img
@@ -208,13 +242,6 @@ const JokeCard: React.FC<JokeCardProps> = ({ joke, onReaction, onDelete, isGener
       </div>
 
       <div className="joke-actions">
-        <button
-          onClick={saveAsImage}
-          className="save-button"
-          title="Guardar como imagen"
-        >
-          💾
-        </button>
         {onDelete && !isGenerated && (
           <button
             onClick={() => onDelete(joke.id)}
