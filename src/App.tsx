@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard'
 import RandomJokePage from './pages/RandomJokePage'
 import JokeDetailPage from './pages/JokeDetailPage'
 import Footer from './components/Footer'
+import LoginPage from './pages/LoginPage'
+import ProtectedRoute from './components/ProtectedRoute'
 import './App.css'
 
 function AppContent() {
@@ -20,7 +22,15 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/dark-humor" element={<DarkHumorPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/random" element={<RandomJokePage />} />
           <Route path="/joke/:id" element={<JokeDetailPage />} />
         </Routes>
